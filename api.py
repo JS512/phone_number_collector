@@ -30,23 +30,23 @@ END:VCARD
     return response
 
 
-def get_id_pw() :
+def get_set_info() :
     with open('./secrets/settings.json') as json_file:
         return json.load(json_file)
     
 def to_login() :
-    login_info = get_id_pw()
+    set_info = get_set_info()
     rs = []
     # 브라우저 드라이버 설정
     driver = webdriver.Chrome()
 
     # 로그인 페이지로 이동
-    driver.get("https://login.office.hiworks.com/power21.co.kr")
+    driver.get(set_info["url"])
 
     el = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > main > div > div:nth-child(1) > form > fieldset > div.mb-5 > div > input"))
     )
-    el.send_keys(login_info["id"])    
+    el.send_keys(set_info["id"])    
         
     button = driver.find_element(By.CSS_SELECTOR, "#root > div > main > div > div:nth-child(1) > form > fieldset > button")
     button.click()
@@ -55,7 +55,7 @@ def to_login() :
     pw_input = WebDriverWait(driver, 10).until(        
         EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > main > div > div:nth-child(1) > form > fieldset > div.mantine-InputWrapper-root.mantine-TextInput-root.mb-5 > div > input"))
     )
-    pw_input.send_keys(login_info["pw"])
+    pw_input.send_keys(set_info["pw"])
     
     
     login_btn = driver.find_element(By.CSS_SELECTOR, "#root > div > main > div > div:nth-child(1) > form > fieldset > button")
